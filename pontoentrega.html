@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<title>PontoEntrega / 物流交付</title>
+
+<!-- PWA: instalável no celular -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%20%22PontoEntrega%22%2C%20%22short_name%22%3A%20%22PontoEntrega%22%2C%20%22description%22%3A%20%22Comprovante%20digital%20de%20entrega%20/%20%5Cu6570%5Cu5b57%5Cu7269%5Cu6d41%5Cu56de%5Cu6267%22%2C%20%22start_url%22%3A%20%22.%22%2C%20%22display%22%3A%20%22standalone%22%2C%20%22background_color%22%3A%20%22%23eef1f6%22%2C%20%22theme_color%22%3A%20%22%23152449%22%2C%20%22orientation%22%3A%20%22portrait%22%2C%20%22icons%22%3A%20%5B%7B%22src%22%3A%20%22data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAQS0lEQVR4nO3c65UT16KFUbWHU4AIIBgIGAeDI4Ag8A9bphFSqx77veb8e8cdR6pzpPXVLtEvF5p59%2BHTj96vAWB03//%2B66X3a0jgIhdk4AHqEwhluIgHGXuAcYiC/VywjQw%2BwDwEwXMu0BuMPsD8xMB9LsoNow%2BwLjHwkwtxMfoAidJjIPrNG34AUkMg7k0bfQAeSYqBmDdq%2BAHYKiEEln%2BDhh%2BAo1YOgWXfmOEHoJQVQ2C5N2T4AahlpRBY5o0YfgBaWSEE/uj9Akow/gC0tMLuTF0wK/wXAMDcZj0NmPJFG34ARjNbCEz3CMD4AzCi2fZpqgCY7eICkGWmnZriuGKmCwoAl8v4jwSGPwEw/gDMaPT9GjoARr94APCWkXdsyOOJkS8YABwx2iOB4U4AjD8AKxpt34YKgNEuDgCUNNLODRMAI10UAKhllL0bIgBGuRgA0MIIu9c9AEa4CADQWu/96xoAvd88APTUcwe7BYDxB4B%2Be9glAIw/APzUYxebB4DxB4Dftd7HpgFg/AHgsZY72SwAjD8APNdqL5sEgPEHgO1a7Gb1ADD%2BALBf7f2sGgDGHwCOq7mj1QLA%2BAPAebX2tPufAgYA2qsSAO7%2BAaCcGrtaPACMPwCUV3pfiwaA8QeAekrurN8AAECgYgHg7h8A6iu1t0UCwPgDQDsldvd0ABh/AGjv7P76DQAABDoVAO7%2BAaCfMzvsBAAAAh0OAHf/ANDf0T0%2BFADGHwDGcWSXPQIAgEC7A8DdPwCMZ%2B8%2BOwEAgEC7AsDdPwCMa89OOwEAgECbA8DdPwCMb%2BteOwEAgECbAsDdPwDMY8tuOwEAgEBPA8DdPwDM59l%2BOwEAgEACAAACvRkAjv8BYF5v7bgTAAAI9DAA3P0DwPwe7bkTAAAIJAAAINDdAHD8DwDruLfrTgAAIJAAAIBAvwWA438AWM/tvjsBAIBAAgAAAv0SAI7/AWBdr3feCQAABBIAABBIAABAoP8DwPN/AFjfde%2BdAABAIAEAAIEEAAAEEgAAEOjlcvEDQABI4wQAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAj0Z%2B8XAKv79vVL75cwrfcfP/d%2BCbCsF38DAMoz%2BuWJASjLIwAozPjX4bpCWU4AoBAD1Y7TADjPCQAUYPzbcr3hPAEAJxmjPlx3OEcAAEAgAQAnuAvty/WH4wQAHGR8xuC/BzhGAABAIH8JEBrwz9b2c2cPdTkBgAP2jJPxP2bPdRMLsJ8AgIqM/zmuH9QjAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAL5S4B05Q%2B4UMqs/1vytw7oRQDQ1Kxf0lDL7WdCENCKAKAJww/bXD8rQoDaBABVGX44RghQmx8BUo3xh/N8jqjFCQDF%2BcKCspwGUIMTAIoy/lCPzxclCQCK8eUE9fmcUYoAoAhfStCOzxslCABO82X0mGtzjuv3mGvDWQIAKvNFfYzrBnW9vPvw6UfvF8G8fElDX/5lAEc5AeAw4w/9%2BRxylAAAgEAeAXBIybuO2Y8w3YH14387P81%2BLWjPXwKkG19YpLt%2BBkQkPXgEwG4lvqxWGv%2BV3stMVrruJd6LiGAvAUBzK31xX634nka24vVe8T0xNgFAUyt/yb3/%2BHnp9zeC1a/xyu%2BN8QgAmkn5ckt5n62lXNeU90l/fgTILp4zbvP6S9w1O84Y7vPt6xfXjM0EAE0kfyklv3eOef/xs3CkOo8AACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAiPbt65feLwG6EABArOv4iwASCQAg0u3of/v6RQgQRQAAvCICSCEAgDjPRl4EkEAAAFG2jrtHAqxOAAAxjgy6CGBVAgCIcGbIRQArEgAAG4gAViMAgOWVGm%2B/C2AlAgBYWo3BFgGsQAAAy6o51CKA2QkAgIM8EmBmAgBYUsthFgHMSAAAy2k9yO8/fm76nwclCABgKcYfthEAwDIcxcN2AgDgIHf/zEwAAEtw9A/7CABgesYf9hMAwNSMPxwjAIBp%2BdEfHCcAADZy989KBAAwJUf/cI4AAKZj/OE8AQBMxfhDGQIAmIYf/UE5AgDgAXf/rEwAAFNw9A9lCQBgeMYfyhMAwNA894c6BAAwrB7j7%2B6fFAIA4D/GnyQCABiS5/5QlwAAhmP8oT4BAAzFj/6gDQEARHP3TyoBAAzD0T%2B0IwCAIRh/aEsAAN0Zf2hPAABd%2BdEf9CEAgCju/uFfAgDoxtE/9CMAgC6MP/QlAIDmjD/0JwCApvzoD8YgAIClufuH%2BwQA0IyjfxiHAACaMP4wFgEAVGf8YTwCAKjKj/5gTAIAWIq7f9hGAADVOPqHcQkAoArjD2MTAEBxnvvD%2BAQAUFSP8Xf3D/sJAGBqxh%2BOEQBAMZ77wzwEAFCE8Ye5CADgND/6g/kIAGA67v7hPAEAnOLoH%2BYkAIDDjD/MSwAAhxh/mJsAAHbzoz%2BYnwAAhufuH8oTAMAujv5hDQIA2Mz4wzoEALCJ8Ye1CAC4w4/cfuV6wHoEANy4jp3R68fdP9QnAOCV29EXAY7%2BYVUCAP7zaOiSI8D4w7oEAFyeD11iBBh/WJsAIF7iuD/jmsD6BADR9gydUazH3T%2B0JwCIdWTQEyLA0T9kEADE%2Bfb1y6mRWzkCjD/kEABEKTVwK0bAiu8JeEwAEKP0wK00mD3ei7t/6EsAEKHWwK0UAS0Zf%2BhPALC82iM9ewR47g%2BZBABLazVus0aA8YdcAoBltR632SJgttcLlCUAWJa7zbH47wPGIgBYWuvRmeWu2tE/IABYngj4lfEHLhcBQAgR8C/jD1wJAGKkR8BorwfoSwBARcmj6%2B4fxiYAiNJjlEaIAEf/wC0BQJy0CDD%2BwD0CgEgpEWD8gUcEALFWj4ARHj0A4xIARHPHWo5rCXMRAMRb8Z8HOvoHnhEAcFkrAow/sIUAgP%2BsEAHGH9hKAMArM0eAH/0BewgA6GzW4Xb3D3MTAHBjxn8e6Ogf2EsAwB0zRYDxB44QAPDADBEw6%2BMDoD8BAG8YOQJ6jL%2B7f1iHAIAnjN6/XAdYiwCADUb754Ge%2BwNnCQDYaJQIMP5ACQIAdugdAX70B5QiAGCn3hHQkrt/WNefvV8A8Jxf/AOlOQGAA1Yfx9XfHyAA4LBVR3LV9wX8SgDACcYSmJUAgJNWioCV3gvwNgEABawwnCu8B2A7AQCFzDygM7924BgBAAXNOKQzvmbgPAEAhRlUYAYCACqYJQJmeZ1AeQIAQhl/yCYAoJKRB3bk1wa0IQCgohGHdsTXBLQnAKAygwuMSABAA6NEwCivA%2BhPAEAjvce3938%2BMBYBAA31GmHjD9wSANCYMQZGIACgg5YRIDiAewQAdLJnmN9//HxoyI0/8IgAgMG9HvE9IWD8gbcIAOjo2Ug/%2Br8f/f8DuBIA0JmRB3oQADCA2zHfc8x/9P8XyCYAYBDX4T7zYz/jD2wlAGAgZwbc%2BAN7CAAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACgCa%2Bff3S%2ByXANHxeaEEAsMv7j597vwTgAZ9P9hAANOOuBp7zOaEVAUBTvtzgMZ8PWhIANOdLDn7nc0FrAoDdSjxn9GUHP5X4PHj%2Bz15/9n4B5Lp%2B6fniIpUQpqeXdx8%2B/ej9IpiTLy8Yg4jmCI8AACCQAOAwdx3Qn88hRwkATvHlA/34/HGGAACAQAKA09yFQHs%2Bd5wlACjClxG04/NGCQKAYnwpQX0%2BZ5QiACjKlxPU4/NFSf4QENX4Q0FQhuGnBicAVONLC87zOaIWJwA04TQA9jH81CYAaEoIwNsMP60IALoSBKQz%2BPQiAAAg0B/f//7rpfeLAADa8q8AACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAv1xuVwu/hYAAOT4/vdfL04AACCQAACAQAIAAAIJAAAI9H8A%2BCEgAKzvuvdOAAAgkAAAgEACAAAC/RIAfgcAAOt6vfNOAAAgkAAAgEC/BYDHAACwntt9dwIAAIEEAAAEuhsAHgMAwDru7boTAAAIJAAAINDDAPAYAADm92jPnQAAQKA3A8ApAADM660ddwIAAIEEAAAEehoAHgMAwHye7bcTAAAItCkAnAIAwDy27LYTAAAItDkAnAIAwPi27rUTAAAItCsAnAIAwLj27LQTAAAItDsAnAIAwHj27rMTAAAIdCgAnAIAwDiO7PLhEwARAAD9Hd1jjwAAINCpAHAKAAD9nNlhJwAAEOh0ADgFAID2zu5vkRMAEQAA7ZTY3WKPAEQAANRXam/9BgAAAhUNAKcAAFBPyZ0tfgIgAgCgvNL7WuURgAgAgHJq7KrfAABAoGoB4BQAAM6rtadVTwBEAAAcV3NHqz8CEAEAsF/t/WzyGwARAADbtdjNZj8CFAEA8FyrvWz6rwBEAAA81nInm/8zQBEAAL9rvY9d/g6ACACAn3rsYrc/BCQCAKDfHnb9S4AiAIBkPXew%2B58CFgEAJOq9f90D4HLpfxEAoKURdm%2BIALhcxrgYAFDbKHs3TABcLuNcFACoYaSdGyoALpexLg4AlDLavg31Ym69%2B/DpR%2B/XAABnjDb8V8OdALw26kUDgC1G3rGhA%2BByGfviAcAjo%2B/X0C/ulkcCAIxu9OG/Gv4E4LVZLioAmWbaqakC4HKZ6%2BICkGO2fZrqxd7ySACA3mYb/qspX/QtIQBAa7MO/9V0jwDumf2/BADmssLuTP8GbjkNAKCWFYb/apk3cksIAFDKSsN/tdwbuiUEADhqxeG/WvaN3RICAGy18vBfLf8GbwkBAB5JGP6rmDd6jxgAIGn0X4t807eEAECe1OG/in7z94gBgHWlj/5rLsQbxADA/Iz%2BfS7KRmIAYB5G/zkX6CBBADAOg7%2BfC1aQKACoz9iX8Q8%2BFoYmkvtXogAAAABJRU5ErkJggg%3D%3D%22%2C%20%22sizes%22%3A%20%22512x512%22%2C%20%22type%22%3A%20%22image/png%22%2C%20%22purpose%22%3A%20%22any%20maskable%22%7D%2C%20%7B%22src%22%3A%20%22data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAQS0lEQVR4nO3c65UT16KFUbWHU4AIIBgIGAeDI4Ag8A9bphFSqx77veb8e8cdR6pzpPXVLtEvF5p59%2BHTj96vAWB03//%2B66X3a0jgIhdk4AHqEwhluIgHGXuAcYiC/VywjQw%2BwDwEwXMu0BuMPsD8xMB9LsoNow%2BwLjHwkwtxMfoAidJjIPrNG34AUkMg7k0bfQAeSYqBmDdq%2BAHYKiEEln%2BDhh%2BAo1YOgWXfmOEHoJQVQ2C5N2T4AahlpRBY5o0YfgBaWSEE/uj9Akow/gC0tMLuTF0wK/wXAMDcZj0NmPJFG34ARjNbCEz3CMD4AzCi2fZpqgCY7eICkGWmnZriuGKmCwoAl8v4jwSGPwEw/gDMaPT9GjoARr94APCWkXdsyOOJkS8YABwx2iOB4U4AjD8AKxpt34YKgNEuDgCUNNLODRMAI10UAKhllL0bIgBGuRgA0MIIu9c9AEa4CADQWu/96xoAvd88APTUcwe7BYDxB4B%2Be9glAIw/APzUYxebB4DxB4Dftd7HpgFg/AHgsZY72SwAjD8APNdqL5sEgPEHgO1a7Gb1ADD%2BALBf7f2sGgDGHwCOq7mj1QLA%2BAPAebX2tPufAgYA2qsSAO7%2BAaCcGrtaPACMPwCUV3pfiwaA8QeAekrurN8AAECgYgHg7h8A6iu1t0UCwPgDQDsldvd0ABh/AGjv7P76DQAABDoVAO7%2BAaCfMzvsBAAAAh0OAHf/ANDf0T0%2BFADGHwDGcWSXPQIAgEC7A8DdPwCMZ%2B8%2BOwEAgEC7AsDdPwCMa89OOwEAgECbA8DdPwCMb%2BteOwEAgECbAsDdPwDMY8tuOwEAgEBPA8DdPwDM59l%2BOwEAgEACAAACvRkAjv8BYF5v7bgTAAAI9DAA3P0DwPwe7bkTAAAIJAAAINDdAHD8DwDruLfrTgAAIJAAAIBAvwWA438AWM/tvjsBAIBAAgAAAv0SAI7/AWBdr3feCQAABBIAABBIAABAoP8DwPN/AFjfde%2BdAABAIAEAAIEEAAAEEgAAEOjlcvEDQABI4wQAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAj0Z%2B8XAKv79vVL75cwrfcfP/d%2BCbCsF38DAMoz%2BuWJASjLIwAozPjX4bpCWU4AoBAD1Y7TADjPCQAUYPzbcr3hPAEAJxmjPlx3OEcAAEAgAQAnuAvty/WH4wQAHGR8xuC/BzhGAABAIH8JEBrwz9b2c2cPdTkBgAP2jJPxP2bPdRMLsJ8AgIqM/zmuH9QjAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAL5S4B05Q%2B4UMqs/1vytw7oRQDQ1Kxf0lDL7WdCENCKAKAJww/bXD8rQoDaBABVGX44RghQmx8BUo3xh/N8jqjFCQDF%2BcKCspwGUIMTAIoy/lCPzxclCQCK8eUE9fmcUYoAoAhfStCOzxslCABO82X0mGtzjuv3mGvDWQIAKvNFfYzrBnW9vPvw6UfvF8G8fElDX/5lAEc5AeAw4w/9%2BRxylAAAgEAeAXBIybuO2Y8w3YH14387P81%2BLWjPXwKkG19YpLt%2BBkQkPXgEwG4lvqxWGv%2BV3stMVrruJd6LiGAvAUBzK31xX634nka24vVe8T0xNgFAUyt/yb3/%2BHnp9zeC1a/xyu%2BN8QgAmkn5ckt5n62lXNeU90l/fgTILp4zbvP6S9w1O84Y7vPt6xfXjM0EAE0kfyklv3eOef/xs3CkOo8AACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAiPbt65feLwG6EABArOv4iwASCQAg0u3of/v6RQgQRQAAvCICSCEAgDjPRl4EkEAAAFG2jrtHAqxOAAAxjgy6CGBVAgCIcGbIRQArEgAAG4gAViMAgOWVGm%2B/C2AlAgBYWo3BFgGsQAAAy6o51CKA2QkAgIM8EmBmAgBYUsthFgHMSAAAy2k9yO8/fm76nwclCABgKcYfthEAwDIcxcN2AgDgIHf/zEwAAEtw9A/7CABgesYf9hMAwNSMPxwjAIBp%2BdEfHCcAADZy989KBAAwJUf/cI4AAKZj/OE8AQBMxfhDGQIAmIYf/UE5AgDgAXf/rEwAAFNw9A9lCQBgeMYfyhMAwNA894c6BAAwrB7j7%2B6fFAIA4D/GnyQCABiS5/5QlwAAhmP8oT4BAAzFj/6gDQEARHP3TyoBAAzD0T%2B0IwCAIRh/aEsAAN0Zf2hPAABd%2BdEf9CEAgCju/uFfAgDoxtE/9CMAgC6MP/QlAIDmjD/0JwCApvzoD8YgAIClufuH%2BwQA0IyjfxiHAACaMP4wFgEAVGf8YTwCAKjKj/5gTAIAWIq7f9hGAADVOPqHcQkAoArjD2MTAEBxnvvD%2BAQAUFSP8Xf3D/sJAGBqxh%2BOEQBAMZ77wzwEAFCE8Ye5CADgND/6g/kIAGA67v7hPAEAnOLoH%2BYkAIDDjD/MSwAAhxh/mJsAAHbzoz%2BYnwAAhufuH8oTAMAujv5hDQIA2Mz4wzoEALCJ8Ye1CAC4w4/cfuV6wHoEANy4jp3R68fdP9QnAOCV29EXAY7%2BYVUCAP7zaOiSI8D4w7oEAFyeD11iBBh/WJsAIF7iuD/jmsD6BADR9gydUazH3T%2B0JwCIdWTQEyLA0T9kEADE%2Bfb1y6mRWzkCjD/kEABEKTVwK0bAiu8JeEwAEKP0wK00mD3ei7t/6EsAEKHWwK0UAS0Zf%2BhPALC82iM9ewR47g%2BZBABLazVus0aA8YdcAoBltR632SJgttcLlCUAWJa7zbH47wPGIgBYWuvRmeWu2tE/IABYngj4lfEHLhcBQAgR8C/jD1wJAGKkR8BorwfoSwBARcmj6%2B4fxiYAiNJjlEaIAEf/wC0BQJy0CDD%2BwD0CgEgpEWD8gUcEALFWj4ARHj0A4xIARHPHWo5rCXMRAMRb8Z8HOvoHnhEAcFkrAow/sIUAgP%2BsEAHGH9hKAMArM0eAH/0BewgA6GzW4Xb3D3MTAHBjxn8e6Ogf2EsAwB0zRYDxB44QAPDADBEw6%2BMDoD8BAG8YOQJ6jL%2B7f1iHAIAnjN6/XAdYiwCADUb754Ge%2BwNnCQDYaJQIMP5ACQIAdugdAX70B5QiAGCn3hHQkrt/WNefvV8A8Jxf/AOlOQGAA1Yfx9XfHyAA4LBVR3LV9wX8SgDACcYSmJUAgJNWioCV3gvwNgEABawwnCu8B2A7AQCFzDygM7924BgBAAXNOKQzvmbgPAEAhRlUYAYCACqYJQJmeZ1AeQIAQhl/yCYAoJKRB3bk1wa0IQCgohGHdsTXBLQnAKAygwuMSABAA6NEwCivA%2BhPAEAjvce3938%2BMBYBAA31GmHjD9wSANCYMQZGIACgg5YRIDiAewQAdLJnmN9//HxoyI0/8IgAgMG9HvE9IWD8gbcIAOjo2Ug/%2Br8f/f8DuBIA0JmRB3oQADCA2zHfc8x/9P8XyCYAYBDX4T7zYz/jD2wlAGAgZwbc%2BAN7CAAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACAAACCQAACCQAACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAgkAAAgkAAAgkAAAgEACgCa%2Bff3S%2ByXANHxeaEEAsMv7j597vwTgAZ9P9hAANOOuBp7zOaEVAUBTvtzgMZ8PWhIANOdLDn7nc0FrAoDdSjxn9GUHP5X4PHj%2Bz15/9n4B5Lp%2B6fniIpUQpqeXdx8%2B/ej9IpiTLy8Yg4jmCI8AACCQAOAwdx3Qn88hRwkATvHlA/34/HGGAACAQAKA09yFQHs%2Bd5wlACjClxG04/NGCQKAYnwpQX0%2BZ5QiACjKlxPU4/NFSf4QENX4Q0FQhuGnBicAVONLC87zOaIWJwA04TQA9jH81CYAaEoIwNsMP60IALoSBKQz%2BPQiAAAg0B/f//7rpfeLAADa8q8AACCQAACAQAIAAAIJAAAIJAAAIJAAAIBAAgAAAv1xuVwu/hYAAOT4/vdfL04AACCQAACAQAIAAAIJAAAI9H8A%2BCEgAKzvuvdOAAAgkAAAgEACAAAC/RIAfgcAAOt6vfNOAAAgkAAAgEC/BYDHAACwntt9dwIAAIEEAAAEuhsAHgMAwDru7boTAAAIJAAAINDDAPAYAADm92jPnQAAQKA3A8ApAADM660ddwIAAIEEAAAEehoAHgMAwHye7bcTAAAItCkAnAIAwDy27LYTAAAItDkAnAIAwPi27rUTAAAItCsAnAIAwLj27LQTAAAItDsAnAIAwHj27rMTAAAIdCgAnAIAwDiO7PLhEwARAAD9Hd1jjwAAINCpAHAKAAD9nNlhJwAAEOh0ADgFAID2zu5vkRMAEQAA7ZTY3WKPAEQAANRXam/9BgAAAhUNAKcAAFBPyZ0tfgIgAgCgvNL7WuURgAgAgHJq7KrfAABAoGoB4BQAAM6rtadVTwBEAAAcV3NHqz8CEAEAsF/t/WzyGwARAADbtdjNZj8CFAEA8FyrvWz6rwBEAAA81nInm/8zQBEAAL9rvY9d/g6ACACAn3rsYrc/BCQCAKDfHnb9S4AiAIBkPXew%2B58CFgEAJOq9f90D4HLpfxEAoKURdm%2BIALhcxrgYAFDbKHs3TABcLuNcFACoYaSdGyoALpexLg4AlDLavg31Ym69%2B/DpR%2B/XAABnjDb8V8OdALw26kUDgC1G3rGhA%2BByGfviAcAjo%2B/X0C/ulkcCAIxu9OG/Gv4E4LVZLioAmWbaqakC4HKZ6%2BICkGO2fZrqxd7ySACA3mYb/qspX/QtIQBAa7MO/9V0jwDumf2/BADmssLuTP8GbjkNAKCWFYb/apk3cksIAFDKSsN/tdwbuiUEADhqxeG/WvaN3RICAGy18vBfLf8GbwkBAB5JGP6rmDd6jxgAIGn0X4t807eEAECe1OG/in7z94gBgHWlj/5rLsQbxADA/Iz%2BfS7KRmIAYB5G/zkX6CBBADAOg7%2BfC1aQKACoz9iX8Q8%2BFoYmkvtXogAAAABJRU5ErkJggg%3D%3D%22%2C%20%22sizes%22%3A%20%22192x192%22%2C%20%22type%22%3A%20%22image/png%22%2C%20%22purpose%22%3A%20%22any%20maskable%22%7D%5D%7D">
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="theme-color" content="#152449">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PontoEntrega">
+<style>
+  :root{
+    --navy:#152449;
+    --navy-2:#1e3364;
+    --blue:#2f5fd6;
+    --blue-2:#2450b8;
+    --yellow:#FFD100;
+    --yellow-dark:#e0ad00;
+    --green:#0a8f4a;
+    --bg:#eef1f6;
+    --card:#ffffff;
+    --line:#e3e7ef;
+    --text:#1c2333;
+    --muted:#8993a6;
+    --ok:#1f9d55;
+    --danger:#e0455a;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:40px;}
+  header.top{
+    background:linear-gradient(135deg,var(--navy),var(--navy-2));
+    color:#fff;
+    padding:22px 20px 26px;
+    border-radius:0 0 22px 22px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:0;
+    height:4px;
+    background:linear-gradient(90deg,var(--green) 0 33%, var(--yellow) 33% 66%, var(--blue) 66% 100%);
+  }
+  header.top .icon{
+    width:42px;height:42px;border-radius:12px;
+    background:rgba(255,255,255,.14);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  header.top .icon svg{width:22px;height:22px;}
+  header.top h1{margin:0;font-size:18px;font-weight:700;letter-spacing:.2px;}
+  header.top p{margin:2px 0 0;font-size:12.5px;color:#aeb8d6;}
+
+  .card{
+    background:var(--card);
+    margin:16px 16px 0;
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow:0 1px 3px rgba(20,30,60,.06);
+  }
+  .section-title{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;color:var(--navy);
+    margin:0 0 12px;
+  }
+  .section-title .dot{width:7px;height:7px;border-radius:50%;background:var(--yellow);}
+  .field{margin-bottom:14px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{
+    display:block;font-size:11.5px;color:var(--muted);
+    margin-bottom:6px;font-weight:600;letter-spacing:.2px;
+  }
+  .field input[type=text],
+  .field input[type=number],
+  .field input[type=datetime-local]{
+    width:100%;
+    padding:12px 13px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:14.5px;
+    background:#fbfcfe;
+    color:var(--text);
+    outline:none;
+    transition:border-color .15s;
+  }
+  .field input:focus{border-color:var(--blue);background:#fff;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .photo-box{
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    aspect-ratio:1/1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:6px;
+    background:#fbfcfe;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .photo-box.has-img{border-style:solid;border-color:var(--line);}
+  .photo-box img{width:100%;height:100%;object-fit:cover;}
+  .photo-box .ph-label{font-size:11px;color:var(--muted);font-weight:600;text-align:center;padding:0 6px;}
+  .photo-box svg{width:22px;height:22px;color:var(--muted);}
+  .photo-box .remove{
+    position:absolute;top:6px;right:6px;
+    width:22px;height:22px;border-radius:50%;
+    background:rgba(20,30,60,.55);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;line-height:1;
+  }
+  .photo-cap{font-size:11.5px;color:var(--muted);text-align:center;margin-top:6px;font-weight:600;}
+  input[type=file]{display:none;}
+
+  .sig-wrap{margin-bottom:16px;}
+  .sig-wrap:last-child{margin-bottom:0;}
+  .sig-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .sig-head span{font-size:12.5px;font-weight:700;color:var(--navy);}
+  .clear-btn{
+    border:none;background:none;color:var(--blue);
+    font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px;
+    cursor:pointer;padding:2px;
+  }
+  .sig-pad-wrap{
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    background:#fbfcfe;
+    position:relative;
+  }
+  canvas.sig{width:100%;height:150px;display:block;touch-action:none;border-radius:12px;}
+  .sig-hint{
+    position:absolute;bottom:8px;left:0;right:0;
+    text-align:center;font-size:11px;color:var(--muted);
+    pointer-events:none;
+  }
+
+  .banner{
+    margin:16px 16px 0;
+    background:#fdeceb;
+    color:var(--danger);
+    border-radius:10px;
+    padding:11px 14px;
+    font-size:12.5px;
+    display:none;
+    text-align:center;
+    font-weight:600;
+  }
+  .banner.show{display:block;}
+
+  .generate-btn{
+    display:block;width:calc(100% - 32px);
+    margin:20px 16px 0;
+    background:var(--blue);
+    color:#fff;border:none;border-radius:12px;
+    padding:15px;font-size:15px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;
+    box-shadow:0 6px 16px rgba(47,95,214,.28);
+  }
+  .generate-btn:active{background:var(--blue-2);}
+  .generate-btn:disabled{background:#b7c3de;box-shadow:none;}
+
+  /* result overlay */
+  .overlay{
+    position:fixed;inset:0;background:rgba(15,20,35,.55);
+    display:none;align-items:flex-end;justify-content:center;z-index:50;
+  }
+  .overlay.show{display:flex;}
+  .sheet{
+    background:#fff;width:100%;max-width:480px;
+    border-radius:20px 20px 0 0;
+    padding:18px 18px 26px;
+    max-height:88vh;overflow-y:auto;
+  }
+  .sheet h2{margin:4px 0 14px;font-size:16px;color:var(--navy);}
+  .sheet img.receipt{width:100%;border-radius:10px;border:1px solid var(--line);margin-bottom:14px;}
+  .sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .sheet-actions button{
+    padding:13px;border-radius:10px;border:none;font-weight:700;font-size:13.5px;cursor:pointer;
+  }
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-secondary{background:#eef1f6;color:var(--navy);}
+  .close-x{
+    position:absolute;top:14px;right:18px;font-size:20px;color:var(--muted);
+    background:none;border:none;cursor:pointer;
+  }
+  .sheet{position:relative;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </div>
+    <div>
+      <h1>PontoEntrega / 物流交付</h1>
+      <p>Comprovantes digitais de mercadoria / 数字物流回执</p>
+    </div>
+  </header>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Quem entrega / 交付人 &nbsp;·&nbsp; Quem recebe / 接收人</div>
+    <div class="field">
+      <label>Quem entrega / 交付人</label>
+      <input type="text" id="fEntrega" placeholder="Nome de quem entrega">
+    </div>
+    <div class="field">
+      <label>Quem recebe / 接收人</label>
+      <input type="text" id="fRecebe" placeholder="Nome de quem recebe">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Encomendas / 包裹 &nbsp;·&nbsp; Plataforma / 平台</div>
+    <div class="row2">
+      <div class="field">
+        <label>Encomendas / 包裹</label>
+        <input type="number" id="fQtd" min="0" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Plataforma / 平台</label>
+        <input type="text" id="fPlataforma" placeholder="Plataforma">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Data e hora da entrega / 交付日期和时间</div>
+    <div class="field">
+      <input type="datetime-local" id="fData">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Fotos / 照片</div>
+    <div class="photo-grid">
+      <div>
+        <div class="photo-box" id="boxPiso" data-key="piso">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A2 2 0 0 1 11.1 3.6h1.8a2 2 0 0 1 1.7 1L16 7"/><circle cx="12" cy="13.5" r="3.2"/></svg>
+          <div class="ph-label">Foto do piso / 地板照片</div>
+          <span class="remove" id="removePiso" style="display:none">✕</span>
+        </div>
+        <input type="file" id="inputPisoCam" accept="image/*" capture="environment">
+        <input type="file" id="inputPisoGal" accept="image/*">
+        <div class="photo-cap">Foto do piso / 地板照片</div>
+      </div>
+      <div>
+        <div class="photo-box" id="boxSistema" data-key="sistema">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A2 2 0 0 1 11.1 3.6h1.8a2 2 0 0 1 1.7 1L16 7"/><circle cx="12" cy="13.5" r="3.2"/></svg>
+          <div class="ph-label">Foto do sistema / 系统照片</div>
+          <span class="remove" id="removeSistema" style="display:none">✕</span>
+        </div>
+        <input type="file" id="inputSistemaCam" accept="image/*" capture="environment">
+        <input type="file" id="inputSistemaGal" accept="image/*">
+        <div class="photo-cap">Foto do sistema / 系统照片</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sig-wrap">
+      <div class="sig-head">
+        <span>Assinatura de quem entrega / 交付人签名</span>
+        <button class="clear-btn" data-clear="sigEntrega">↺ Limpar</button>
+      </div>
+      <div class="sig-pad-wrap">
+        <canvas class="sig" id="sigEntrega"></canvas>
+        <div class="sig-hint" id="hintEntrega">Assine dentro da área / 在框内签名</div>
+      </div>
+    </div>
+    <div class="sig-wrap">
+      <div class="sig-head">
+        <span>Assinatura de quem recebe / 接收人签名</span>
+        <button class="clear-btn" data-clear="sigRecebe">↺ Limpar</button>
+      </div>
+      <div class="sig-pad-wrap">
+        <canvas class="sig" id="sigRecebe"></canvas>
+        <div class="sig-hint" id="hintRecebe">Assine dentro da área / 在框内签名</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="generate-btn" id="genBtn">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+    Gerar comprovante / 生成回执
+  </button>
+  <div style="text-align:center;font-size:10px;color:#c3c9d6;margin-top:14px;letter-spacing:.3px;">criado por Adrian Ramos</div>
+</div>
+
+<div class="overlay" id="photoMenuOverlay">
+  <div class="sheet" style="padding-bottom:24px;">
+    <button class="close-x" id="closePhotoMenu">✕</button>
+    <h2 id="photoMenuTitle">Adicionar foto / 添加照片</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button id="photoMenuCamera" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);background:#fbfcfe;font-size:14.5px;font-weight:600;color:var(--text);cursor:pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#152449" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A2 2 0 0 1 11.1 3.6h1.8a2 2 0 0 1 1.7 1L16 7"/><circle cx="12" cy="13.5" r="3.2"/></svg>
+        Tirar foto / 拍照
+      </button>
+      <button id="photoMenuGallery" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);background:#fbfcfe;font-size:14.5px;font-weight:600;color:var(--text);cursor:pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#152449" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="M21 15l-5-5-9 9"/></svg>
+        Escolher da galeria / 从相册选择
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <button class="close-x" id="closeSheet">✕</button>
+    <h2>Comprovante gerado / 回执已生成</h2>
+    <img class="receipt" id="receiptImg" alt="comprovante">
+    <div class="sheet-actions">
+      <button class="btn-secondary" id="btnShare">Compartilhar</button>
+      <button class="btn-primary" id="btnDownload">Baixar imagem</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const banner = $('banner');
+
+  function showBanner(msg){
+    banner.textContent = msg;
+    banner.classList.add('show');
+    setTimeout(()=>banner.classList.remove('show'), 3500);
+  }
+
+  // default datetime = now
+  const dEl = $('fData');
+  function pad(n){return n.toString().padStart(2,'0');}
+  const now = new Date();
+  dEl.value = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+'T'+pad(now.getHours())+':'+pad(now.getMinutes());
+
+  // ---- photo handling ----
+  const photos = { piso: null, sistema: null };
+  const photoInputs = {
+    piso: { cam: $('inputPisoCam'), gal: $('inputPisoGal') },
+    sistema: { cam: $('inputSistemaCam'), gal: $('inputSistemaGal') }
+  };
+  let activePhotoKey = null;
+
+  function loadPhotoFile(key, file){
+    if(!file) return;
+    const box = key === 'piso' ? $('boxPiso') : $('boxSistema');
+    const remove = key === 'piso' ? $('removePiso') : $('removeSistema');
+    const reader = new FileReader();
+    reader.onload = e => {
+      photos[key] = e.target.result;
+      box.classList.add('has-img');
+      box.querySelectorAll('svg, .ph-label').forEach(el=>el.remove());
+      let img = box.querySelector('img');
+      if(!img){ img = document.createElement('img'); box.insertBefore(img, remove); }
+      img.src = photos[key];
+      remove.style.display = 'flex';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function wirePhoto(boxId, removeId, key){
+    const box = $(boxId), remove = $(removeId);
+    box.addEventListener('click', (e)=>{
+      if(e.target === remove) return;
+      activePhotoKey = key;
+      $('photoMenuTitle').textContent = key === 'piso'
+        ? 'Foto do piso / 地板照片'
+        : 'Foto do sistema / 系统照片';
+      $('photoMenuOverlay').classList.add('show');
+    });
+    photoInputs[key].cam.addEventListener('change', ()=>{
+      loadPhotoFile(key, photoInputs[key].cam.files[0]);
+      photoInputs[key].cam.value = '';
+    });
+    photoInputs[key].gal.addEventListener('change', ()=>{
+      loadPhotoFile(key, photoInputs[key].gal.files[0]);
+      photoInputs[key].gal.value = '';
+    });
+    remove.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      photos[key] = null;
+      box.classList.remove('has-img');
+      const img = box.querySelector('img');
+      if(img) img.remove();
+      remove.style.display = 'none';
+      if(!box.querySelector('svg')){
+        box.insertAdjacentHTML('afterbegin', `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A2 2 0 0 1 11.1 3.6h1.8a2 2 0 0 1 1.7 1L16 7"/><circle cx="12" cy="13.5" r="3.2"/></svg><div class="ph-label">${key==='piso'?'Foto do piso / 地板照片':'Foto do sistema / 系统照片'}</div>`);
+      }
+    });
+  }
+  wirePhoto('boxPiso','removePiso','piso');
+  wirePhoto('boxSistema','removeSistema','sistema');
+
+  $('photoMenuCamera').addEventListener('click', ()=>{
+    $('photoMenuOverlay').classList.remove('show');
+    if(activePhotoKey) photoInputs[activePhotoKey].cam.click();
+  });
+  $('photoMenuGallery').addEventListener('click', ()=>{
+    $('photoMenuOverlay').classList.remove('show');
+    if(activePhotoKey) photoInputs[activePhotoKey].gal.click();
+  });
+  $('closePhotoMenu').addEventListener('click', ()=> $('photoMenuOverlay').classList.remove('show'));
+
+  // ---- signature pads ----
+  function makeSigPad(canvasId, hintId){
+    const canvas = $(canvasId);
+    const hint = $(hintId);
+    const ctx = canvas.getContext('2d');
+    let drawing = false, hasInk = false;
+    let lastX=0, lastY=0;
+
+    function resize(){
+      const ratio = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const prevData = hasInk ? canvas.toDataURL() : null;
+      canvas.width = rect.width * ratio;
+      canvas.height = rect.height * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#152449';
+      if(prevData){
+        const img = new Image();
+        img.onload = ()=> ctx.drawImage(img,0,0,rect.width,rect.height);
+        img.src = prevData;
+      }
+    }
+    window.addEventListener('resize', resize);
+    setTimeout(resize, 50);
+
+    function pos(e){
+      const rect = canvas.getBoundingClientRect();
+      const t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+    }
+    function start(e){
+      e.preventDefault();
+      drawing = true; hasInk = true;
+      hint.style.display = 'none';
+      const p = pos(e); lastX=p.x; lastY=p.y;
+    }
+    function move(e){
+      if(!drawing) return;
+      e.preventDefault();
+      const p = pos(e);
+      ctx.beginPath();
+      ctx.moveTo(lastX,lastY);
+      ctx.lineTo(p.x,p.y);
+      ctx.stroke();
+      lastX=p.x; lastY=p.y;
+    }
+    function end(){ drawing=false; }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, {passive:false});
+    canvas.addEventListener('touchmove', move, {passive:false});
+    canvas.addEventListener('touchend', end);
+
+    return {
+      clear(){
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0,0,rect.width,rect.height);
+        hasInk = false;
+        hint.style.display = 'block';
+      },
+      isEmpty(){ return !hasInk; },
+      dataURL(){ return canvas.toDataURL('image/png'); }
+    };
+  }
+  const padEntrega = makeSigPad('sigEntrega','hintEntrega');
+  const padRecebe = makeSigPad('sigRecebe','hintRecebe');
+  document.querySelectorAll('.clear-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = btn.getAttribute('data-clear');
+      (target === 'sigEntrega' ? padEntrega : padRecebe).clear();
+    });
+  });
+
+  // ---- generate receipt ----
+  function loadImg(src){
+    return new Promise(res=>{
+      if(!src){ res(null); return; }
+      const img = new Image();
+      img.onload = ()=>res(img);
+      img.onerror = ()=>res(null);
+      img.src = src;
+    });
+  }
+
+  async function generate(){
+    const entrega = $('fEntrega').value.trim();
+    const recebe = $('fRecebe').value.trim();
+    const qtd = $('fQtd').value.trim();
+    const plataforma = $('fPlataforma').value.trim();
+    const data = $('fData').value;
+
+    if(!entrega || !recebe){
+      showBanner('Preencha quem entrega e quem recebe / 请填写交付人和接收人'); return;
+    }
+    if(padEntrega.isEmpty() || padRecebe.isEmpty()){
+      showBanner('Ambas as assinaturas são obrigatórias / 需要双方签名'); return;
+    }
+
+    const W = 760, PAD = 40;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    const ctx = canvas.getContext('2d');
+
+    const imgPiso = await loadImg(photos.piso);
+    const imgSistema = await loadImg(photos.sistema);
+    const sigE = await loadImg(padEntrega.dataURL());
+    const sigR = await loadImg(padRecebe.dataURL());
+
+    // estimate height
+    let H = 300;
+    if(imgPiso || imgSistema) H += 220;
+    H += 340; // signatures + footer
+    canvas.height = H;
+
+    // background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,W,H);
+
+    // header
+    ctx.fillStyle = '#152449';
+    ctx.fillRect(0,0,W,86);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 22px -apple-system, Arial, sans-serif';
+    ctx.fillText('PontoEntrega  /  物流交付', PAD, 40);
+    ctx.font = '400 13px -apple-system, Arial, sans-serif';
+    ctx.fillStyle = '#aeb8d6';
+    ctx.fillText('Comprovante digital de mercadoria / 数字物流回执', PAD, 64);
+
+    // franja verde-amarelo-azul
+    ctx.fillStyle = '#0a8f4a';
+    ctx.fillRect(0, 82, W/3, 4);
+    ctx.fillStyle = '#FFD100';
+    ctx.fillRect(W/3, 82, W/3, 4);
+    ctx.fillStyle = '#2f5fd6';
+    ctx.fillRect((W/3)*2, 82, W/3, 4);
+
+    let y = 120;
+    ctx.fillStyle = '#1c2333';
+    ctx.font = '600 15px -apple-system, Arial, sans-serif';
+
+    function row(label, value){
+      ctx.fillStyle = '#8993a6';
+      ctx.font = '600 11.5px -apple-system, Arial, sans-serif';
+      ctx.fillText(label, PAD, y);
+      ctx.fillStyle = '#1c2333';
+      ctx.font = '600 16px -apple-system, Arial, sans-serif';
+      ctx.fillText(value || '—', PAD, y + 20);
+      y += 46;
+    }
+    row('QUEM ENTREGA / 交付人', entrega);
+    row('QUEM RECEBE / 接收人', recebe);
+    row('ENCOMENDAS / 包裹      ·      PLATAFORMA / 平台', (qtd||'0') + '   ·   ' + (plataforma || '—'));
+    row('DATA E HORA / 日期和时间', data ? new Date(data).toLocaleString('pt-BR') : '—');
+
+    y += 6;
+    // photos
+    const boxW = (W - PAD*2 - 16) / 2;
+    const boxH = 190;
+    if(imgPiso || imgSistema){
+      ctx.strokeStyle = '#e3e7ef';
+      [ [imgPiso,'Foto do piso / 地板照片', PAD],
+        [imgSistema,'Foto do sistema / 系统照片', PAD+boxW+16] ].forEach(([img,label,x])=>{
+        ctx.fillStyle = '#fbfcfe';
+        ctx.fillRect(x,y,boxW,boxH);
+        ctx.strokeRect(x,y,boxW,boxH);
+        if(img){
+          const scale = Math.max(boxW/img.width, boxH/img.height);
+          const iw = img.width*scale, ih = img.height*scale;
+          ctx.save();
+          ctx.beginPath(); ctx.rect(x,y,boxW,boxH); ctx.clip();
+          ctx.drawImage(img, x+(boxW-iw)/2, y+(boxH-ih)/2, iw, ih);
+          ctx.restore();
+        }
+        ctx.fillStyle = '#8993a6';
+        ctx.font = '600 11px -apple-system, Arial, sans-serif';
+        ctx.fillText(label, x+8, y+boxH+18);
+      });
+      y += boxH + 42;
+    }
+
+    // signatures
+    const sigBoxW = (W - PAD*2 - 16) / 2;
+    const sigBoxH = 110;
+    [ [sigE, 'Quem entrega / 交付人', PAD],
+      [sigR, 'Quem recebe / 接收人', PAD+sigBoxW+16] ].forEach(([img,label,x])=>{
+      ctx.fillStyle = '#8993a6';
+      ctx.font = '600 11.5px -apple-system, Arial, sans-serif';
+      ctx.fillText('ASSINATURA · ' + label.toUpperCase(), x, y);
+      ctx.strokeStyle = '#e3e7ef';
+      ctx.strokeRect(x, y+10, sigBoxW, sigBoxH);
+      if(img){
+        const scale = Math.min(sigBoxW/img.width, sigBoxH/img.height) * 0.9;
+        const iw = img.width*scale, ih = img.height*scale;
+        ctx.drawImage(img, x+(sigBoxW-iw)/2, y+10+(sigBoxH-ih)/2, iw, ih);
+      }
+    });
+    y += sigBoxH + 50;
+
+    ctx.fillStyle = '#8993a6';
+    ctx.font = '400 11px -apple-system, Arial, sans-serif';
+    ctx.fillText('Gerado em ' + new Date().toLocaleString('pt-BR') + ' · PontoEntrega', PAD, y);
+    ctx.font = '400 9px -apple-system, Arial, sans-serif';
+    ctx.fillStyle = '#c3c9d6';
+    ctx.textAlign = 'right';
+    ctx.fillText('criado por Adrian Ramos', W - PAD, y);
+    ctx.textAlign = 'left';
+
+    const dataURL = canvas.toDataURL('image/png');
+    $('receiptImg').src = dataURL;
+    $('overlay').classList.add('show');
+
+    window._lastReceiptDataURL = dataURL;
+  }
+
+  $('genBtn').addEventListener('click', generate);
+  $('closeSheet').addEventListener('click', ()=> $('overlay').classList.remove('show'));
+
+  $('btnDownload').addEventListener('click', ()=>{
+    const a = document.createElement('a');
+    a.href = window._lastReceiptDataURL;
+    a.download = 'comprovante-entrega-' + Date.now() + '.png';
+    a.click();
+  });
+
+  $('btnShare').addEventListener('click', async ()=>{
+    try{
+      const res = await fetch(window._lastReceiptDataURL);
+      const blob = await res.blob();
+      const file = new File([blob], 'comprovante.png', {type:'image/png'});
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], title:'Comprovante de entrega'});
+      } else {
+        showBanner('Compartilhamento não suportado — use Baixar imagem / 不支持分享，请使用下载');
+      }
+    }catch(err){
+      showBanner('Não foi possível compartilhar / 无法分享');
+    }
+  });
+})();
+
+// Registra um service worker mínimo (via Blob) para habilitar a instalação
+// como app no celular (Android/Chrome). Não armazena nem faz cache de nada.
+if('serviceWorker' in navigator){
+  const swCode = `self.addEventListener('fetch', ()=>{});`;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+}
+</script>
+</body>
+</html>
