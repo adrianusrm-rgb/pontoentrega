@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>PontoEntrega / 物流交付</title>
+<style>
+  :root{
+    --navy:#152449;
+    --navy-2:#1e3364;
+    --blue:#2f5fd6;
+    --blue-2:#2450b8;
+    --bg:#eef1f6;
+    --card:#ffffff;
+    --line:#e3e7ef;
+    --text:#1c2333;
+    --muted:#8993a6;
+    --ok:#1f9d55;
+    --danger:#e0455a;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:40px;}
+  header.top{
+    background:linear-gradient(135deg,var(--navy),var(--navy-2));
+    color:#fff;
+    padding:22px 20px 26px;
+    border-radius:0 0 22px 22px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  header.top .icon{
+    width:42px;height:42px;border-radius:12px;
+    background:rgba(255,255,255,.14);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  header.top .icon svg{width:22px;height:22px;}
+  header.top h1{margin:0;font-size:18px;font-weight:700;letter-spacing:.2px;}
+  header.top p{margin:2px 0 0;font-size:12.5px;color:#aeb8d6;}
+
+  .card{
+    background:var(--card);
+    margin:16px 16px 0;
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow:0 1px 3px rgba(20,30,60,.06);
+  }
+  .section-title{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;color:var(--navy);
+    margin:0 0 12px;
+  }
+  .section-title .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);}
+  .field{margin-bottom:14px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{
+    display:block;font-size:11.5px;color:var(--muted);
+    margin-bottom:6px;font-weight:600;letter-spacing:.2px;
+  }
+  .field input[type=text],
+  .field input[type=number],
+  .field input[type=datetime-local]{
+    width:100%;
+    padding:12px 13px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:14.5px;
+    background:#fbfcfe;
+    color:var(--text);
+    outline:none;
+    transition:border-color .15s;
+  }
+  .field input:focus{border-color:var(--blue);background:#fff;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .photo-box{
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    aspect-ratio:1/1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:6px;
+    background:#fbfcfe;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .photo-box.has-img{border-style:solid;border-color:var(--line);}
+  .photo-box img{width:100%;height:100%;object-fit:cover;}
+  .photo-box .ph-label{font-size:11px;color:var(--muted);font-weight:600;text-align:center;padding:0 6px;}
+  .photo-box svg{width:22px;height:22px;color:var(--muted);}
+  .photo-box .remove{
+    position:absolute;top:6px;right:6px;
+    width:22px;height:22px;border-radius:50%;
+    background:rgba(20,30,60,.55);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;line-height:1;
+  }
+  .photo-cap{font-size:11.5px;color:var(--muted);text-align:center;margin-top:6px;font-weight:600;}
+  input[type=file]{display:none;}
+
+  .sig-wrap{margin-bottom:16px;}
+  .sig-wrap:last-child{margin-bottom:0;}
+  .sig-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .sig-head span{font-size:12.5px;font-weight:700;color:var(--navy);}
+  .clear-btn{
+    border:none;background:none;color:var(--blue);
+    font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px;
+    cursor:pointer;padding:2px;
+  }
+  .sig-pad-wrap{
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    background:#fbfcfe;
+    position:relative;
+  }
+  canvas.sig{width:100%;height:150px;display:block;touch-action:none;border-radius:12px;}
+  .sig-hint{
+    position:absolute;bottom:8px;left:0;right:0;
+    text-align:center;font-size:11px;color:var(--muted);
+    pointer-events:none;
+  }
+
+  .banner{
+    margin:16px 16px 0;
+    background:#fdeceb;
+    color:var(--danger);
+    border-radius:10px;
+    padding:11px 14px;
+    font-size:12.5px;
+    display:none;
+    text-align:center;
+    font-weight:600;
+  }
+  .banner.show{display:block;}
+
+  .generate-btn{
+    display:block;width:calc(100% - 32px);
+    margin:20px 16px 0;
+    background:var(--blue);
+    color:#fff;border:none;border-radius:12px;
+    padding:15px;font-size:15px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;
+    box-shadow:0 6px 16px rgba(47,95,214,.28);
+  }
+  .generate-btn:active{background:var(--blue-2);}
+  .generate-btn:disabled{background:#b7c3de;box-shadow:none;}
+
+  /* result overlay */
+  .overlay{
+    position:fixed;inset:0;background:rgba(15,20,35,.55);
+    display:none;align-items:flex-end;justify-content:center;z-index:50;
+  }
+  .overlay.show{display:flex;}
+  .sheet{
+    background:#fff;width:100%;max-width:480px;
+    border-radius:20px 20px 0 0;
+    padding:18px 18px 26px;
+    max-height:88vh;overflow-y:auto;
+  }
+  .sheet h2{margin:4px 0 14px;font-size:16px;color:var(--navy);}
+  .sheet img.receipt{width:100%;border-radius:10px;border:1px solid var(--line);margin-bottom:14px;}
+  .sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .sheet-actions button{
+    padding:13px;border-radius:10px;border:none;font-weight:700;font-size:13.5px;cursor:pointer;
+  }
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-secondary{background:#eef1f6;color:var(--navy);}
+  .close-x{
+    position:absolute;top:14px;right:18px;font-size:20px;color:var(--muted);
+    background:none;border:none;cursor:pointer;
+  }
+  .sheet{position:relative;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </div>
+    <div>
+      <h1>PontoEntrega / 物流交付</h1>
+      <p>Comprovantes digitais de mercadoria / 数字物流回执</p>
+    </div>
+  </header>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Quem entrega / 交付人 &nbsp;·&nbsp; Quem recebe / 接收人</div>
+    <div class="field">
+      <label>Quem entrega / 交付人</label>
+      <input type="text" id="fEntrega" placeholder="Nome de quem entrega">
+    </div>
+    <div class="field">
+      <label>Quem recebe / 接收人</label>
+      <input type="text" id="fRecebe" placeholder="Nome de quem recebe">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Encomendas / 包裹 &nbsp;·&nbsp; Plataforma / 平台</div>
+    <div class="row2">
+      <div class="field">
+        <label>Encomendas / 包裹</label>
+        <input type="number" id="fQtd" min="0" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Plataforma / 平台</label>
+        <input type="text" id="fPlataforma" placeholder="Plataforma">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Data e hora da entrega / 交付日期和时间</div>
+    <div class="field">
+      <input type="datetime-local" id="fData">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="dot"></span>Fotos / 照片</div>
+    <div class="photo-grid">
+      <div>
+        <div class="photo-box" id="boxPiso">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A2 2 0 0 1 11.1 3.6h1.8a2 2 0 0 1 1.7 1L16 7"/><circle cx="12" cy="13.5" r="3.2"/></svg>
+          <div class="ph-label">Foto do piso / 地板照片</div>
+          <span class="remove" id="removePiso" style="display:none">✕</span>
+        </div>
+        <input type="file" id="inputPiso" accept="image/*" capture="environment">
+        <div class="photo-cap">Foto do piso / 地板照片</div>
+      </div>
+      <div>
+        <div class="photo-box" id="boxSistema">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A2 2 0 0 1 11.1 3.6h1.8a2 2 0 0 1 1.7 1L16 7"/><circle cx="12" cy="13.5" r="3.2"/></svg>
+          <div class="ph-label">Foto do sistema / 系统照片</div>
+          <span class="remove" id="removeSistema" style="display:none">✕</span>
+        </div>
+        <input type="file" id="inputSistema" accept="image/*" capture="environment">
+        <div class="photo-cap">Foto do sistema / 系统照片</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sig-wrap">
+      <div class="sig-head">
+        <span>Assinatura de quem entrega / 交付人签名</span>
+        <button class="clear-btn" data-clear="sigEntrega">↺ Limpar</button>
+      </div>
+      <div class="sig-pad-wrap">
+        <canvas class="sig" id="sigEntrega"></canvas>
+        <div class="sig-hint" id="hintEntrega">Assine dentro da área / 在框内签名</div>
+      </div>
+    </div>
+    <div class="sig-wrap">
+      <div class="sig-head">
+        <span>Assinatura de quem recebe / 接收人签名</span>
+        <button class="clear-btn" data-clear="sigRecebe">↺ Limpar</button>
+      </div>
+      <div class="sig-pad-wrap">
+        <canvas class="sig" id="sigRecebe"></canvas>
+        <div class="sig-hint" id="hintRecebe">Assine dentro da área / 在框内签名</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="generate-btn" id="genBtn">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+    Gerar comprovante / 生成回执
+  </button>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <button class="close-x" id="closeSheet">✕</button>
+    <h2>Comprovante gerado / 回执已生成</h2>
+    <img class="receipt" id="receiptImg" alt="comprovante">
+    <div class="sheet-actions">
+      <button class="btn-secondary" id="btnShare">Compartilhar</button>
+      <button class="btn-primary" id="btnDownload">Baixar imagem</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const banner = $('banner');
+
+  function showBanner(msg){
+    banner.textContent = msg;
+    banner.classList.add('show');
+    setTimeout(()=>banner.classList.remove('show'), 3500);
+  }
+
+  // default datetime = now
+  const dEl = $('fData');
+  function pad(n){return n.toString().padStart(2,'0');}
+  const now = new Date();
+  dEl.value = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+'T'+pad(now.getHours())+':'+pad(now.getMinutes());
+
+  // ---- photo handling ----
+  const photos = { piso: null, sistema: null };
+  function wirePhoto(boxId, inputId, removeId, key){
+    const box = $(boxId), input = $(inputId), remove = $(removeId);
+    box.addEventListener('click', (e)=>{
+      if(e.target === remove) return;
+      input.click();
+    });
+    input.addEventListener('change', ()=>{
+      const file = input.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        photos[key] = e.target.result;
+        box.classList.add('has-img');
+        box.querySelectorAll('svg, .ph-label').forEach(el=>el.remove());
+        let img = box.querySelector('img');
+        if(!img){ img = document.createElement('img'); box.insertBefore(img, remove); }
+        img.src = photos[key];
+        remove.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    });
+    remove.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      photos[key] = null;
+      input.value = '';
+      box.classList.remove('has-img');
+      const img = box.querySelector('img');
+      if(img) img.remove();
+      remove.style.display = 'none';
+      if(!box.querySelector('svg')){
+        box.insertAdjacentHTML('afterbegin', `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A2 2 0 0 1 11.1 3.6h1.8a2 2 0 0 1 1.7 1L16 7"/><circle cx="12" cy="13.5" r="3.2"/></svg><div class="ph-label">${key==='piso'?'Foto do piso / 地板照片':'Foto do sistema / 系统照片'}</div>`);
+      }
+    });
+  }
+  wirePhoto('boxPiso','inputPiso','removePiso','piso');
+  wirePhoto('boxSistema','inputSistema','removeSistema','sistema');
+
+  // ---- signature pads ----
+  function makeSigPad(canvasId, hintId){
+    const canvas = $(canvasId);
+    const hint = $(hintId);
+    const ctx = canvas.getContext('2d');
+    let drawing = false, hasInk = false;
+    let lastX=0, lastY=0;
+
+    function resize(){
+      const ratio = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const prevData = hasInk ? canvas.toDataURL() : null;
+      canvas.width = rect.width * ratio;
+      canvas.height = rect.height * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#152449';
+      if(prevData){
+        const img = new Image();
+        img.onload = ()=> ctx.drawImage(img,0,0,rect.width,rect.height);
+        img.src = prevData;
+      }
+    }
+    window.addEventListener('resize', resize);
+    setTimeout(resize, 50);
+
+    function pos(e){
+      const rect = canvas.getBoundingClientRect();
+      const t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+    }
+    function start(e){
+      e.preventDefault();
+      drawing = true; hasInk = true;
+      hint.style.display = 'none';
+      const p = pos(e); lastX=p.x; lastY=p.y;
+    }
+    function move(e){
+      if(!drawing) return;
+      e.preventDefault();
+      const p = pos(e);
+      ctx.beginPath();
+      ctx.moveTo(lastX,lastY);
+      ctx.lineTo(p.x,p.y);
+      ctx.stroke();
+      lastX=p.x; lastY=p.y;
+    }
+    function end(){ drawing=false; }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, {passive:false});
+    canvas.addEventListener('touchmove', move, {passive:false});
+    canvas.addEventListener('touchend', end);
+
+    return {
+      clear(){
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0,0,rect.width,rect.height);
+        hasInk = false;
+        hint.style.display = 'block';
+      },
+      isEmpty(){ return !hasInk; },
+      dataURL(){ return canvas.toDataURL('image/png'); }
+    };
+  }
+  const padEntrega = makeSigPad('sigEntrega','hintEntrega');
+  const padRecebe = makeSigPad('sigRecebe','hintRecebe');
+  document.querySelectorAll('.clear-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = btn.getAttribute('data-clear');
+      (target === 'sigEntrega' ? padEntrega : padRecebe).clear();
+    });
+  });
+
+  // ---- generate receipt ----
+  function loadImg(src){
+    return new Promise(res=>{
+      if(!src){ res(null); return; }
+      const img = new Image();
+      img.onload = ()=>res(img);
+      img.onerror = ()=>res(null);
+      img.src = src;
+    });
+  }
+
+  async function generate(){
+    const entrega = $('fEntrega').value.trim();
+    const recebe = $('fRecebe').value.trim();
+    const qtd = $('fQtd').value.trim();
+    const plataforma = $('fPlataforma').value.trim();
+    const data = $('fData').value;
+
+    if(!entrega || !recebe){
+      showBanner('Preencha quem entrega e quem recebe / 请填写交付人和接收人'); return;
+    }
+    if(padEntrega.isEmpty() || padRecebe.isEmpty()){
+      showBanner('Ambas as assinaturas são obrigatórias / 需要双方签名'); return;
+    }
+
+    const W = 760, PAD = 40;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    const ctx = canvas.getContext('2d');
+
+    const imgPiso = await loadImg(photos.piso);
+    const imgSistema = await loadImg(photos.sistema);
+    const sigE = await loadImg(padEntrega.dataURL());
+    const sigR = await loadImg(padRecebe.dataURL());
+
+    // estimate height
+    let H = 300;
+    if(imgPiso || imgSistema) H += 220;
+    H += 340; // signatures + footer
+    canvas.height = H;
+
+    // background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,W,H);
+
+    // header
+    ctx.fillStyle = '#152449';
+    ctx.fillRect(0,0,W,86);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 22px -apple-system, Arial, sans-serif';
+    ctx.fillText('PontoEntrega  /  物流交付', PAD, 40);
+    ctx.font = '400 13px -apple-system, Arial, sans-serif';
+    ctx.fillStyle = '#aeb8d6';
+    ctx.fillText('Comprovante digital de mercadoria / 数字物流回执', PAD, 64);
+
+    let y = 120;
+    ctx.fillStyle = '#1c2333';
+    ctx.font = '600 15px -apple-system, Arial, sans-serif';
+
+    function row(label, value){
+      ctx.fillStyle = '#8993a6';
+      ctx.font = '600 11.5px -apple-system, Arial, sans-serif';
+      ctx.fillText(label, PAD, y);
+      ctx.fillStyle = '#1c2333';
+      ctx.font = '600 16px -apple-system, Arial, sans-serif';
+      ctx.fillText(value || '—', PAD, y + 20);
+      y += 46;
+    }
+    row('QUEM ENTREGA / 交付人', entrega);
+    row('QUEM RECEBE / 接收人', recebe);
+    row('ENCOMENDAS / 包裹      ·      PLATAFORMA / 平台', (qtd||'0') + '   ·   ' + (plataforma || '—'));
+    row('DATA E HORA / 日期和时间', data ? new Date(data).toLocaleString('pt-BR') : '—');
+
+    y += 6;
+    // photos
+    const boxW = (W - PAD*2 - 16) / 2;
+    const boxH = 190;
+    if(imgPiso || imgSistema){
+      ctx.strokeStyle = '#e3e7ef';
+      [ [imgPiso,'Foto do piso / 地板照片', PAD],
+        [imgSistema,'Foto do sistema / 系统照片', PAD+boxW+16] ].forEach(([img,label,x])=>{
+        ctx.fillStyle = '#fbfcfe';
+        ctx.fillRect(x,y,boxW,boxH);
+        ctx.strokeRect(x,y,boxW,boxH);
+        if(img){
+          const scale = Math.max(boxW/img.width, boxH/img.height);
+          const iw = img.width*scale, ih = img.height*scale;
+          ctx.save();
+          ctx.beginPath(); ctx.rect(x,y,boxW,boxH); ctx.clip();
+          ctx.drawImage(img, x+(boxW-iw)/2, y+(boxH-ih)/2, iw, ih);
+          ctx.restore();
+        }
+        ctx.fillStyle = '#8993a6';
+        ctx.font = '600 11px -apple-system, Arial, sans-serif';
+        ctx.fillText(label, x+8, y+boxH+18);
+      });
+      y += boxH + 42;
+    }
+
+    // signatures
+    const sigBoxW = (W - PAD*2 - 16) / 2;
+    const sigBoxH = 110;
+    [ [sigE, 'Quem entrega / 交付人', PAD],
+      [sigR, 'Quem recebe / 接收人', PAD+sigBoxW+16] ].forEach(([img,label,x])=>{
+      ctx.fillStyle = '#8993a6';
+      ctx.font = '600 11.5px -apple-system, Arial, sans-serif';
+      ctx.fillText('ASSINATURA · ' + label.toUpperCase(), x, y);
+      ctx.strokeStyle = '#e3e7ef';
+      ctx.strokeRect(x, y+10, sigBoxW, sigBoxH);
+      if(img){
+        const scale = Math.min(sigBoxW/img.width, sigBoxH/img.height) * 0.9;
+        const iw = img.width*scale, ih = img.height*scale;
+        ctx.drawImage(img, x+(sigBoxW-iw)/2, y+10+(sigBoxH-ih)/2, iw, ih);
+      }
+    });
+    y += sigBoxH + 50;
+
+    ctx.fillStyle = '#8993a6';
+    ctx.font = '400 11px -apple-system, Arial, sans-serif';
+    ctx.fillText('Gerado em ' + new Date().toLocaleString('pt-BR') + ' · PontoEntrega', PAD, y);
+
+    const dataURL = canvas.toDataURL('image/png');
+    $('receiptImg').src = dataURL;
+    $('overlay').classList.add('show');
+
+    // save record for the team log (shared)
+    try{
+      if(window.storage){
+        const key = 'receipt:' + Date.now();
+        await window.storage.set(key, JSON.stringify({
+          entrega, recebe, qtd, plataforma, data, generatedAt: new Date().toISOString()
+        }), true);
+      }
+    }catch(err){ /* storage optional, ignore failures */ }
+
+    window._lastReceiptDataURL = dataURL;
+  }
+
+  $('genBtn').addEventListener('click', generate);
+  $('closeSheet').addEventListener('click', ()=> $('overlay').classList.remove('show'));
+
+  $('btnDownload').addEventListener('click', ()=>{
+    const a = document.createElement('a');
+    a.href = window._lastReceiptDataURL;
+    a.download = 'comprovante-entrega-' + Date.now() + '.png';
+    a.click();
+  });
+
+  $('btnShare').addEventListener('click', async ()=>{
+    try{
+      const res = await fetch(window._lastReceiptDataURL);
+      const blob = await res.blob();
+      const file = new File([blob], 'comprovante.png', {type:'image/png'});
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], title:'Comprovante de entrega'});
+      } else {
+        showBanner('Compartilhamento não suportado — use Baixar imagem / 不支持分享，请使用下载');
+      }
+    }catch(err){
+      showBanner('Não foi possível compartilhar / 无法分享');
+    }
+  });
+})();
+</script>
+</body>
+</html>
